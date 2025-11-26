@@ -490,7 +490,14 @@ function AboutSection({
 }: {
   scrollToSection: (id: string) => void;
 }) {
-  const { colors, gradients, text: themeText } = useThemeColors();
+  const { colors, text: themeText } = useThemeColors();
+
+const gradients = {
+  hero: "linear-gradient(to bottom, #ffffff, #fff4f0)",
+  heroSoft: "linear-gradient(to bottom, #fff7f5, #ffe4dc)",
+  section: "linear-gradient(to bottom, #ffffff, #fdf2ec)",
+};
+
 
   const [selectedService, setSelectedService] = useState<
     (typeof serviceData)[0] | null
@@ -534,16 +541,20 @@ function AboutSection({
             className="text-center mb-6 sm:mb-8 md:mb-10"
           >
             <h2
-              className="mb-4"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 2.8rem)",
-                fontWeight: 800,
-                letterSpacing: "-0.02em",
-                ...themeText.gradient,
-              }}
-            >
-              Leading Municipal Excellence
-            </h2>
+                className="mb-4"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 2.8rem)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.02em",
+                  // text gradient style
+                  backgroundImage: `linear-gradient(90deg, ${colors.primary}, ${colors.accent})`,
+                  WebkitBackgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                Leading Municipal Excellence
+              </h2>
+
 
             <p
               className="max-w-4xl mx-auto leading-relaxed"
@@ -748,7 +759,14 @@ function AboutSection({
 }
 
 export function HomePage() {
-  const { colors, gradients, text: themeText } = useThemeColors();
+  const { colors, text: themeText } = useThemeColors();
+
+  // Local gradients definition used only on this page
+  const gradients = {
+    hero: "linear-gradient(to bottom, #ffffff, #fff4f0)",
+    heroSoft: "linear-gradient(to bottom, #fff7f5, #ffe4dc)",
+    section: "linear-gradient(to bottom, #ffffff, #fdf2ec)",
+  };
   const [activeSection, setActiveSection] = useState("hero");
   const [currentServiceName, setCurrentServiceName] = useState(
     "Municipal Water Bill Management"
@@ -1337,76 +1355,69 @@ export function HomePage() {
 
                 return (
                   <motion.div
-                    initial={{
-                      opacity: 0,
-                      x: isEvenRow ? -50 : 50,
-                    }}
-                    whileInView={{
-                      opacity: 1,
-                      x: 0,
-                    }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{
-                      delay: index * 0.05,
-                      duration: 0.6,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    whileHover={{
-                      scale: 1.08,
-                      y: -10,
-                    }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="p-4 sm:p-6 border-2 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl flex flex-col items-center justify-center text-center group h-full relative overflow-hidden cursor-pointer will-change-transform"
-                    style={{
-                      borderColor: cardColor.border,
-                      backgroundColor: cardColor.bg,
-                      boxShadow: `0 4px 15px rgba(0,0,0,0.2)`,
-                    }}
-                    onMouseEnter={(e) => {
-                      // Keep gray border for gray cards, red border for red cards
-                      const hoverBorderColor =
-                        index % 2 === 0 ? cardColor.icon : cardColor.border;
-                      e.currentTarget.style.borderColor = hoverBorderColor;
-                      e.currentTarget.style.boxShadow = `0 20px 50px rgba(0,0,0,0.3), 0 0 0 2px ${hoverBorderColor}`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = cardColor.border;
-                      e.currentTarget.style.boxShadow = `0 4px 15px rgba(0,0,0,0.2)`;
-                    }}
-                  >
-                    {/* Top accent bar */}
-                    <div
-                      className="absolute top-0 left-0 right-0 h-1 transition-all duration-200 group-hover:h-2"
-                      style={{ backgroundColor: cardColor.icon }}
-                    />
+                        initial={{
+                          opacity: 0,
+                          x: isEvenRow ? -50 : 50,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          x: 0,
+                        }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{
+                          delay: index * 0.05,
+                          duration: 0.6,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        whileHover={{
+                          scale: 1.08,
+                          y: -10,
+                        }}
+                        className="p-4 sm:p-6 border-2 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl flex flex-col items-center justify-center text-center group h-full relative overflow-hidden cursor-pointer will-change-transform"
+                        style={{
+                          borderColor: cardColor.border,
+                          backgroundColor: cardColor.bg,
+                          boxShadow: `0 4px 15px rgba(0,0,0,0.2)`,
+                        }}
+                        onMouseEnter={(e) => {
+                          const hoverBorderColor =
+                            index % 2 === 0 ? cardColor.icon : cardColor.border;
+                          e.currentTarget.style.borderColor = hoverBorderColor;
+                          e.currentTarget.style.boxShadow = `0 20px 50px rgba(0,0,0,0.3), 0 0 0 2px ${hoverBorderColor}`;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = cardColor.border;
+                          e.currentTarget.style.boxShadow = `0 4px 15px rgba(0,0,0,0.2)`;
+                        }}
+                      >
+                        {/* Municipal Emblem */}
+                        <motion.div
+                          className="mb-3 sm:mb-4 relative z-10"
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <div className="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center p-2 rounded-lg transition-shadow duration-300">
+                            <img
+                              src={client.logo}
+                              alt={`${client.name} Logo`}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        </motion.div>
 
-                    {/* Municipal Emblem */}
-                    <motion.div
-                      className="mb-3 sm:mb-4 relative z-10"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <div className="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center p-2 rounded-lg transition-shadow duration-300">
-                        <img
-                          src={client.logo}
-                          alt={`${client.name} Logo`}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                    </motion.div>
+                        {/* Client Name */}
+                        <h3
+                          className="text-sm sm:text-base relative z-10 transition-all duration-300"
+                          style={{
+                            fontWeight: 700,
+                            color: "white",
+                            lineHeight: 1.4,
+                          }}
+                        >
+                          {client.name}
+                        </h3>
+                </motion.div>
 
-                    {/* Client Name */}
-                    <h3
-                      className="text-sm sm:text-base relative z-10 transition-all duration-300"
-                      style={{
-                        fontWeight: 700,
-                        color: "white",
-                        lineHeight: 1.4,
-                      }}
-                    >
-                      {client.name}
-                    </h3>
-                  </motion.div>
                 );
               };
 
@@ -1506,12 +1517,16 @@ export function HomePage() {
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
-                          transition={{ delay: index * 0.05 }}
+                          // merged both transitions into one
+                          transition={{
+                            delay: index * 0.05,
+                            duration: 0.2,
+                            ease: "easeOut",
+                          }}
                           whileHover={{
                             scale: 1.08,
                             y: -10,
                           }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
                           className="p-6 border-2 rounded-2xl shadow-lg hover:shadow-2xl flex flex-col items-center justify-center text-center group relative overflow-hidden cursor-pointer will-change-transform"
                           style={{
                             borderColor: cardColor.border,
@@ -1521,21 +1536,15 @@ export function HomePage() {
                           onMouseEnter={(e) => {
                             // Keep gray border for gray cards, red border for red cards
                             const hoverBorderColor =
-                              index % 2 === 0
-                                ? cardColor.icon
-                                : cardColor.border;
-                            e.currentTarget.style.borderColor =
-                              hoverBorderColor;
+                              index % 2 === 0 ? cardColor.icon : cardColor.border;
+                            e.currentTarget.style.borderColor = hoverBorderColor;
                             e.currentTarget.style.boxShadow = `0 20px 50px rgba(0,0,0,0.3), 0 0 0 2px ${hoverBorderColor}`;
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor =
-                              cardColor.border;
+                            e.currentTarget.style.borderColor = cardColor.border;
                             e.currentTarget.style.boxShadow = `0 4px 15px rgba(0,0,0,0.2)`;
                           }}
                         >
-                          {/* Top accent bar */}
-
                           {/* Municipal Emblem */}
                           <motion.div
                             className="mb-4 relative z-10"
@@ -1553,18 +1562,19 @@ export function HomePage() {
                             </div>
                           </motion.div>
 
-                          {/* Client Name */}
-                          <h3
-                            className="text-base relative z-10 transition-all duration-300"
-                            style={{
-                              fontWeight: 700,
-                              color: "white",
-                              lineHeight: 1.4,
-                            }}
-                          >
-                            {client.name}
-                          </h3>
-                        </motion.div>
+  {/* Client Name */}
+  <h3
+    className="text-base relative z-10 transition-all duration-300"
+    style={{
+      fontWeight: 700,
+      color: "white",
+      lineHeight: 1.4,
+    }}
+  >
+    {client.name}
+  </h3>
+</motion.div>
+
                       );
                     })}
                   </div>

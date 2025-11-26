@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { PageLoader } from "./PageLoader";
 
@@ -16,7 +22,7 @@ export function useRouteLoader() {
   return useContext(RouteLoaderContext);
 }
 
-export function RouteLoaderProvider({ children }: { children: React.ReactNode }) {
+export function RouteLoaderProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -24,19 +30,17 @@ export function RouteLoaderProvider({ children }: { children: React.ReactNode })
   useEffect(() => {
     if (!pathname) return;
 
-    // We *want* to trigger loading on route change.
-    // This is safe, so we disable the lint rule for this line.
+    // Trigger loader on route + query changes
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true);
 
     const timeout = window.setTimeout(() => {
       setIsLoading(false);
-    }, 500); // adjust duration if needed
+    }, 500); // adjust duration if you want
 
     return () => {
       window.clearTimeout(timeout);
     };
-    // include search params so loader also triggers on query changes
   }, [pathname, searchParams?.toString()]);
 
   return (

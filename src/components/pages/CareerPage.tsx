@@ -820,8 +820,10 @@ Period: ${exp.startDate} to ${endDateText}${currentWorkingText}`;
         {/* <CultureCarousel colors={colors.colors} cultureSlides={cultureSlides} /> */}
 
         {/* Culture & Values Carousel */}
-        <CultureCarousel colors={colors} cultureSlides={cultureSlides} />
-
+            <CultureCarousel
+            colors={colors as unknown as Record<string, string>}
+            cultureSlides={cultureSlides}
+            />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
                 {/* Category Filter */}

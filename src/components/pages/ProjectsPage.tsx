@@ -479,7 +479,7 @@ export function ProjectsPage() {
                             <motion.button
                                 whileHover={{ scale: 1.03, y: -2 }}
                                 whileTap={{ scale: 0.97 }}
-                                onClick={() => navigate('/')}
+                                onClick={() => router.push("/")}
                                 className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-1.5 sm:py-2 bg-white rounded-full shadow-xl hover:shadow-2xl transition-all border-2 mx-auto"
                                 style={{ fontWeight: 600, color: colors.secondary, borderColor: 'white' }}
                             >

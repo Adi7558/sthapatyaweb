@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker@8.10.1";
-
+import { DayPicker, type DayPickerProps } from "react-day-picker";
 import { cn } from "./utils";
 import { buttonVariants } from "./button";
 
@@ -59,14 +58,33 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
-      components={{
-        IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn("size-4", className)} {...props} />
-        ),
-        IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn("size-4", className)} {...props} />
-        ),
-      }}
+      components={
+        {
+          // v9 uses a single Chevron component instead of IconLeft/IconRight
+          Chevron: ({
+            className,
+            disabled,
+            orientation,
+            ...iconProps
+          }: {
+            className?: string;
+            disabled?: boolean;
+            orientation?: "left" | "right";
+          }) => {
+            const Icon = orientation === "left" ? ChevronLeft : ChevronRight;
+            return (
+              <Icon
+                className={cn(
+                  "size-4",
+                  disabled && "opacity-50",
+                  className,
+                )}
+                {...iconProps}
+              />
+            );
+          },
+        } as unknown as Partial<DayPickerProps["components"]>
+      }
       {...props}
     />
   );
