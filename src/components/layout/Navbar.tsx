@@ -91,7 +91,7 @@ export function Navbar() {
                     color: colors.primary,
                   }}
                 >
-                  Sthapatya Consultants
+                  Sthapatya Consultants & Softwares 
                 </span>
                 <span
                   className="-mt-1 block truncate"
