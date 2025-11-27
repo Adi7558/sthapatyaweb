@@ -542,48 +542,51 @@ export function ProjectsPage() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
-              {IMPACT_METRICS.map((metric) => (
-                <motion.div
-                  key={metric.label}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 }}
-                  whileHover={{ y: -4 }}
-                  className="bg-white rounded-xl p-2.5 sm:p-3 text-center border-2 shadow-md"
-                  style={{ borderColor: `${colors.accent}60` }}
-                >
-                  <div
-                    className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-1.5 sm:mb-2 bg-gray-50 rounded-xl flex items-center justify-center border-2"
-                    style={{ borderColor: colors.accent }}
-                  >
-                    <metric.icon
-                      size={18}
-                      className="sm:w-5 sm:h-5"
-                      style={{ color: colors.accent }}
-                    />
-                  </div>
-                  <p
-                    className="text-lg sm:text-xl md:text-2xl mb-0.5"
-                    style={{ fontWeight: 700, color: colors.secondary }}
-                  >
-                    {metric.value}
-                  </p>
-                  <p
-                    className="text-xs sm:text-sm mb-0.5 leading-tight"
-                    style={{ fontWeight: 600, color: colors.text }}
-                  >
-                    {metric.label}
-                  </p>
-                  <p
-                    className="text-[10px] sm:text-[12px] leading-tight"
-                    style={{ color: colors.primary }}
-                  >
-                    {metric.desc}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
+                  {IMPACT_METRICS.map((metric) => (
+                    <motion.div
+                      key={metric.label}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.1 }}
+                      whileHover={{ y: -4 }}
+                      className="bg-white rounded-xl p-2.5 sm:p-3 text-center border-2 shadow-md"
+                      style={{ borderColor: `${colors.accent}60` }}
+                    >
+                      <div
+                        className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-1.5 sm:mb-2 bg-gray-50 rounded-xl flex items-center justify-center border-2"
+                        style={{
+                          borderColor: colors.accent,
+                          color: colors.accent, // ✅ icon will inherit this color
+                        }}
+                      >
+                        <metric.icon
+                          size={18}
+                          className="sm:w-5 sm:h-5"
+                        />
+                      </div>
+                      <p
+                        className="text-lg sm:text-xl md:text-2xl mb-0.5"
+                        style={{ fontWeight: 700, color: colors.secondary }}
+                      >
+                        {metric.value}
+                      </p>
+                      <p
+                        className="text-xs sm:text-sm mb-0.5 leading-tight"
+                        style={{ fontWeight: 600, color: colors.text }}
+                      >
+                        {metric.label}
+                      </p>
+                      <p
+                        className="text-[10px] sm:text-[12px] leading-tight"
+                        style={{ color: colors.primary }}
+                      >
+                        {metric.desc}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+
           </div>
         </motion.section>
 

@@ -835,7 +835,7 @@ Period: ${exp.startDate} to ${endDateText}${currentWorkingText}`;
       </div>
 
       {/* Culture & Values Carousel */}
-      <CultureCarousel colors={colors as ThemeColors} cultureSlides={CULTURE_SLIDES} />
+      <CultureCarousel colors={colors as unknown as ThemeColors} cultureSlides={CULTURE_SLIDES} />
 
       {/* Main section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">

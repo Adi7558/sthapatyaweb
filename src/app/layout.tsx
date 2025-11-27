@@ -1,27 +1,22 @@
+// src/app/layout.tsx
 import "../styles/globals.css";
-import { Dancing_Script } from "next/font/google";
 import type { ReactNode } from "react";
+import type { Metadata } from "next";
 
 import { AppProviders } from "./providers";
 import { RouteLoaderProvider } from "@/components/common/RouteLoaderProvider";
 
-const dancingScript = Dancing_Script({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-dancing-script",
-});
-
-export const metadata = {
+export const metadata: Metadata = {
   title: "Sthapatya Consultant Pvt",
   description: "Website migrated from React + Vite to Next.js",
-    icons: {
+  icons: {
     icon: "/faviconLogo.png", // ✅ uses /public/faviconLogo.png
   },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={dancingScript.variable}>
+    <html lang="en">
       <body>
         <RouteLoaderProvider>
           <AppProviders>{children}</AppProviders>
