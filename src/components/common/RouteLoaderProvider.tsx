@@ -1,52 +1,43 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { PageLoader } from "./PageLoader";
+import { usePathname } from "next/navigation";
 
-type RouteLoaderContextValue = {
-  isLoading: boolean;
-};
+interface RouteLoaderContextValue {
+  loading: boolean;
+}
 
 const RouteLoaderContext = createContext<RouteLoaderContextValue>({
-  isLoading: false,
+  loading: false,
 });
 
-export function useRouteLoader() {
-  return useContext(RouteLoaderContext);
-}
+export const useRouteLoader = () => useContext(RouteLoaderContext);
 
-export function RouteLoaderProvider({ children }: { children: ReactNode }) {
+export const RouteLoaderProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [loading, setLoading] = useState(false);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!pathname) return;
+    const hasVisited = sessionStorage.getItem("hasVisited");
 
-    // Trigger loader on route + query changes
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsLoading(true);
+    // Show loader only on first visit and only if it's not a 404 path
+    if (!hasVisited && pathname !== "/not-found") {
+      setLoading(true);
+      const timer = setTimeout(() => {
+        setLoading(false);
+        sessionStorage.setItem("hasVisited", "true");
+      }, 500); // duration of loader
 
-    const timeout = window.setTimeout(() => {
-      setIsLoading(false);
-    }, 500); // adjust duration if you want
-
-    return () => {
-      window.clearTimeout(timeout);
-    };
-  }, [pathname, searchParams?.toString()]);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname]);
 
   return (
-    <RouteLoaderContext.Provider value={{ isLoading }}>
-      {isLoading && <PageLoader />}
-      {children}
+    <RouteLoaderContext.Provider value={{ loading }}>
+      {loading ? <PageLoader /> : children}
     </RouteLoaderContext.Provider>
   );
-}
+};

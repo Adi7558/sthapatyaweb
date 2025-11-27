@@ -5,23 +5,26 @@ import { Toaster } from "sonner";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/theme/ThemeContext";
-import { RouteLoaderProvider } from "@/components/common/RouteLoaderProvider";
+import { usePathname } from "next/navigation";
 
-export function AppProviders({ children }: { children: React.ReactNode }) {
+interface AppProvidersProps {
+  children: React.ReactNode;
+}
+
+export function AppProviders({ children }: AppProvidersProps) {
+  const pathname = usePathname();
+
+  // Hide layout ONLY when the route is the Next.js built-in 404 page
+  const hideLayout =
+   pathname?.startsWith("/_not-found");
+
   return (
     <ThemeProvider>
-      <RouteLoaderProvider>
-        {/* 🔔 Sonner toaster – now all toast.*() calls will work */}
-        <Toaster
-          position="top-right"
-          richColors
-          closeButton
-        />
+      <Toaster position="top-right" richColors closeButton />
 
-        <Navbar />
-        {children}
-        <Footer />
-      </RouteLoaderProvider>
+      {!hideLayout && <Navbar />}
+      {children}
+      {!hideLayout && <Footer />}
     </ThemeProvider>
   );
 }
