@@ -14,6 +14,9 @@ const dancingScript = Dancing_Script({
 export const metadata = {
   title: "Sthapatya Consultant Pvt",
   description: "Website migrated from React + Vite to Next.js",
+    icons: {
+    icon: "/faviconLogo.png", // ✅ uses /public/faviconLogo.png
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -1,15 +1,15 @@
+"use client";
+
 import { Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function NotFound() {
+export default function NotFound() {
   const router = useRouter();
-
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-white via-[#fff4f0] to-white px-4 py-8">
       {/* Centered card */}
       <div className="max-w-5xl w-full bg-white rounded-3xl shadow-2xl border border-[#f2d3cb] overflow-hidden animate-fadeIn">
         <div className="grid md:grid-cols-2">
-
           {/* LEFT: TEXT SECTION */}
           <div className="relative p-8 md:p-10 lg:p-12 flex flex-col justify-center">
             {/* Small badge */}
@@ -24,7 +24,7 @@ export function NotFound() {
             <div className="mt-8 flex justify-center">
               <button
                 onClick={() => router.push("/")}
-                className="inline-flex items-center gap-2 rounded-full bg-[#BF3131] px-6 py-2.5 text-sm font-medium text-black shadow-md shadow-[#A62828]/35 hover:bg-[#8e2020] hover:shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.97]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#BF3131] px-6 py-2.5 text-sm font-medium text-white shadow-md shadow-[#A62828]/35 hover:bg-[#8e2020] hover:shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.97]"
               >
                 <Home size={16} />
                 Go to Home
@@ -36,8 +36,8 @@ export function NotFound() {
             </h2>
 
             <p className="mt-2 text-sm md:text-base text-neutral-600 max-w-md">
-              The page you are looking for is not available or may have been moved.
-              Please check the URL or return to the home page.
+              The page you are looking for is not available or may have been
+              moved. Please check the URL or return to the home page.
             </p>
 
             {/* Steps */}
@@ -52,7 +52,10 @@ export function NotFound() {
                 <span className="mt-[2px] flex h-6 w-6 items-center justify-center rounded-full border border-neutral-300 text-[11px] text-neutral-700">
                   2
                 </span>
-                <span>Use the main navigation on the home page to find what you need.</span>
+                <span>
+                  Use the main navigation on the home page to find what you
+                  need.
+                </span>
               </div>
             </div>
 
@@ -82,7 +85,12 @@ export function NotFound() {
                   </linearGradient>
                 </defs>
 
-                <circle cx="130" cy="120" r="105" fill="rgba(255,255,255,0.12)" />
+                <circle
+                  cx="130"
+                  cy="120"
+                  r="105"
+                  fill="rgba(255,255,255,0.12)"
+                />
 
                 <path
                   d="M130 35C101 35 78 58 78 87c0 17 7 31 18 41 8 7 12 17 12 28v7h44v-7c0-11 4-21 12-28 11-10 18-24 18-41 0-29-23-52-52-52Z"
@@ -105,17 +113,49 @@ export function NotFound() {
                   strokeLinecap="round"
                 />
 
-                <rect x="102" y="156" width="56" height="11" rx="5.5" fill="url(#baseGrad)" stroke="#E4CBC5" strokeWidth="1.5"/>
-                <rect x="102" y="171" width="56" height="11" rx="5.5" fill="url(#baseGrad)" stroke="#E4CBC5" strokeWidth="1.5"/>
-                <rect x="108" y="188" width="44" height="8" rx="4" fill="#A62828"/>
-                <rect x="108" y="199" width="44" height="8" rx="4" fill="#7C1919"/>
+                <rect
+                  x="102"
+                  y="156"
+                  width="56"
+                  height="11"
+                  rx="5.5"
+                  fill="url(#baseGrad)"
+                  stroke="#E4CBC5"
+                  strokeWidth="1.5"
+                />
+                <rect
+                  x="102"
+                  y="171"
+                  width="56"
+                  height="11"
+                  rx="5.5"
+                  fill="url(#baseGrad)"
+                  stroke="#E4CBC5"
+                  strokeWidth="1.5"
+                />
+                <rect
+                  x="108"
+                  y="188"
+                  width="44"
+                  height="8"
+                  rx="4"
+                  fill="#A62828"
+                />
+                <rect
+                  x="108"
+                  y="199"
+                  width="44"
+                  height="8"
+                  rx="4"
+                  fill="#7C1919"
+                />
 
                 <g stroke="#FFEDE8" strokeWidth="2" strokeLinecap="round">
-                  <path d="M68 82h10"/>
-                  <path d="M70 100h10"/>
-                  <path d="M184 82h10"/>
-                  <path d="M182 100h10"/>
-                  <path d="M128 30v10"/>
+                  <path d="M68 82h10" />
+                  <path d="M70 100h10" />
+                  <path d="M184 82h10" />
+                  <path d="M182 100h10" />
+                  <path d="M128 30v10" />
                 </g>
               </svg>
 
@@ -129,5 +169,3 @@ export function NotFound() {
     </div>
   );
 }
-
-export default NotFound;

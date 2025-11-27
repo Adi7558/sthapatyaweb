@@ -1,17 +1,9 @@
 ﻿"use client";
 
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { motion } from "motion/react";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  Building2,
-  Send,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Building2, Send } from "lucide-react";
 import { useThemeColors } from "../theme/useThemeColors";
-import { Footer } from "../layout/Footer";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { toast } from "sonner";
 import axios from "axios";
@@ -21,26 +13,75 @@ type ContactApiResponse = {
   message?: string;
 };
 
+type ContactFormData = {
+  name: string;
+  email: string;
+  organization: string;
+  message: string;
+};
+
+type Office = {
+  city: string;
+  address: string;
+  phone: string;
+  hours: string;
+};
+
+/* -------------------- STATIC DATA MOVED OUTSIDE COMPONENT -------------------- */
+
+const OFFICES: Office[] = [
+  {
+    city: "Amravati",
+    address:
+      "4, Swapnashri Colony,Siddhivinayak Nagar, Ashiyad Square,Shegaon Road, Amravati, Maharashtra, India 444604",
+    phone: "1800 833 2700, 0721-2970300",
+    hours: "Mon-Sat: 9:00 AM - 6:00 PM",
+  },
+  {
+    city: "Pune",
+    address:
+      "8th floor, Velocity, MONT VERT, Baner - Pashan Link Rd, Pashan, Pune, Maharashtra 411021",
+    phone: "8975758104, +91 20-46700861",
+    hours: "Mon-Sat: 9:00 AM - 6:00 PM",
+  },
+  {
+    city: "Thane",
+    address:
+      "1101, Lodha Supremus, Lodha Business District 2,Off Kolshet Road, Thane-West, Maharashtra, India 400607",
+    phone: "7028791416, +91 20-46700861",
+    hours: "Mon-Sat: 9:00 AM - 6:00 PM",
+  },
+  {
+    city: "Panvel",
+    address:
+      "Saisakshi Apartment, Plot No. 96,Near Saraswat Bank,Panvel, Maharashtra",
+    phone: "+91 7774091416",
+    hours: "Mon-Sat: 9:00 AM - 6:00 PM",
+  },
+];
+
+/* -------------------------------- COMPONENT -------------------------------- */
+
 export function ContactPage() {
   const { colors } = useThemeColors();
 
-  // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     organization: "",
     message: "",
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitSuccessMessage, setSubmitSuccessMessage] = useState("");
-
 
   // Handle input changes
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -48,7 +89,7 @@ export function ContactPage() {
   };
 
   // Simple frontend validation
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     if (!formData.name.trim()) {
       toast.error("Please enter your name.");
       return false;
@@ -82,11 +123,11 @@ export function ContactPage() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitSuccess(false);
+    setSubmitSuccessMessage("");
 
     try {
       const response = await axios.post<ContactApiResponse>(
@@ -101,29 +142,34 @@ export function ContactPage() {
 
       const data = response.data;
 
-        if (data.success) {
-            const message =
-                data.message || "Your message has been sent successfully!";
+      if (data.success) {
+        const message =
+          data.message || "Your message has been sent successfully!";
 
-            // toast (existing)
-            toast.success("✅ " + message);
+        toast.success("✅ " + message);
 
-            // ✅ show inline banner
-            setSubmitSuccess(true);
-            setSubmitSuccessMessage(message);
+        // inline banner
+        setSubmitSuccess(true);
+        setSubmitSuccessMessage(message);
 
-            // reset form
-            setFormData({ name: "", email: "", organization: "", message: "" });
+        // reset form
+        setFormData({
+          name: "",
+          email: "",
+          organization: "",
+          message: "",
+        });
 
-            // auto-hide banner after 6s (optional)
-            setTimeout(() => {
-                setSubmitSuccess(false);
-                setSubmitSuccessMessage("");
-            }, 6000);
-            } else {
-            toast.error("⚠️ " + (data.message || "Failed to send message."));
-            }
+        // auto-hide banner
+        const timer = window.setTimeout(() => {
+          setSubmitSuccess(false);
+          setSubmitSuccessMessage("");
+        }, 6000);
 
+        // optional: if you want to clear timer on unmount, you can use useEffect
+      } else {
+        toast.error("⚠️ " + (data.message || "Failed to send message."));
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("❌ Something went wrong. Please try again later.");
@@ -132,45 +178,14 @@ export function ContactPage() {
     }
   };
 
-  const offices = [
-    {
-      city: "Amravati",
-      address:
-        "4, Swapnashri Colony,Siddhivinayak Nagar, Ashiyad Square,Shegaon Road, Amravati, Maharashtra, India 444604",
-      phone: "1800 833 2700, 0721-2970300",
-      hours: "Mon-Sat: 9:00 AM - 6:00 PM",
-    },
-    {
-      city: "Pune",
-      address:
-        "8th floor, Velocity, MONT VERT, Baner - Pashan Link Rd, Pashan, Pune, Maharashtra 411021",
-      phone: " 8975758104, +91 20-46700861",
-      hours: "Mon-Sat: 9:00 AM - 6:00 PM",
-    },
-    {
-      city: "Thane",
-      address:
-        "1101, Lodha Supremus, Lodha Business District 2,Off Kolshet Road, Thane-West, Maharashtra, India 400607",
-      phone: "7028791416, + 91 20 - 46700861",
-      hours: "Mon-Sat: 9:00 AM - 6:00 PM",
-    },
-    {
-      city: "Panvel",
-      address:
-        "Saisakshi Apartment, Plot No. 96,Near Saraswat Bank,Panvel, Maharashtra",
-      phone: "+91 7774091416",
-      hours: "Mon-Sat: 9:00 AM - 6:00 PM",
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section with Video Background */}
-      <div className="relative pt-24 sm:pt-20 md:pt-20 h-auto min-h-[650px] sm:h-auto sm:min-h-[600px] md:h-auto md:min-h-[680px] lg:h-[70vh] lg:min-h-[700px] overflow-hidden pb-6 sm:pb-6 md:pb-8 lg:pb-0">
+      {/* Hero Section */}
+      <div className="relative pt-24 sm:pt-20 md:pt-20 h-auto min-h-[650px] sm:min-h-[600px] md:min-h-[680px] lg:h-[70vh] lg:min-h-[700px] overflow-hidden pb-6 sm:pb-6 md:pb-8 lg:pb-0">
         <div className="absolute inset-0">
           <ImageWithFallback
             src="/image_data/Website_Hero_Section/contact.avif"
-            alt="Career Opportunities"
+            alt="Contact Sthapatya"
             className="w-full h-full object-cover"
             style={{
               objectPosition: "center center",
@@ -205,8 +220,8 @@ export function ContactPage() {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="text-2xl sm:text-xl md:text-2xl lg:text-3xl text-gray-200 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-4"
             >
-              Connect with us for any inquiries or support. We&apos;re
-              committed to helping you transform municipal governance.
+              Connect with us for any inquiries or support. We&apos;re committed
+              to helping you transform municipal governance.
             </motion.p>
 
             {/* Contact Info Cards */}
@@ -295,9 +310,6 @@ export function ContactPage() {
         </div>
       </div>
 
-      {/* Why Connect Section */}
-      {/* ... keep your existing why-connect + image collage code here unchanged ... */}
-
       {/* Contact Form + Offices */}
       <div
         id="contact-form"
@@ -327,6 +339,21 @@ export function ContactPage() {
               </p>
             </div>
 
+            {/* Success banner */}
+            {submitSuccess && submitSuccessMessage && (
+              <div
+                className="mb-4 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg border text-xs sm:text-sm md:text-base"
+                style={{
+                  borderColor: colors.accent,
+                  backgroundColor: "#ecfdf3",
+                  color: "#166534",
+                  fontWeight: 500,
+                }}
+              >
+                {submitSuccessMessage}
+              </div>
+            )}
+
             <form
               className="space-y-3 sm:space-y-3.5 md:space-y-4"
               onSubmit={handleSubmit}
@@ -340,9 +367,7 @@ export function ContactPage() {
                   }}
                 >
                   Your Name{" "}
-                  <span style={{ color: colors.accent }}>
-                    *
-                  </span>
+                  <span style={{ color: colors.accent }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -364,9 +389,7 @@ export function ContactPage() {
                   }}
                 >
                   Email Address{" "}
-                  <span style={{ color: colors.accent }}>
-                    *
-                  </span>
+                  <span style={{ color: colors.accent }}>*</span>
                 </label>
                 <input
                   type="email"
@@ -408,9 +431,7 @@ export function ContactPage() {
                   }}
                 >
                   Message{" "}
-                  <span style={{ color: colors.accent }}>
-                    *
-                  </span>
+                  <span style={{ color: colors.accent }}>*</span>
                 </label>
                 <textarea
                   name="message"
@@ -442,123 +463,117 @@ export function ContactPage() {
             </form>
           </motion.div>
 
-          {/* Offices (unchanged) */}
-          {/* ... keep your existing offices grid here ... */}
-
           {/* Office Locations */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="lg:col-span-3"
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-3"
+          >
+            <div className="mb-4 sm:mb-5 md:mb-6">
+              <div
+                className="w-10 sm:w-12 md:w-16 h-1 mb-2 sm:mb-3 md:mb-4 rounded-full"
+                style={{ backgroundColor: colors.accent }}
+              />
+              <h2
+                className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-1.5 sm:mb-2"
+                style={{ fontWeight: 700, color: colors.text }}
+              >
+                Our Offices
+              </h2>
+              <p className="text-[11px] sm:text-xs md:text-sm lg:text-base text-gray-600">
+                Visit us at any of our locations across Maharashtra
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
+              {OFFICES.map((office, index) => (
+                <motion.div
+                  key={office.city}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + index * 0.1 }}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 border-2 border-gray-200 hover:shadow-lg transition-all"
+                  style={{
+                    borderColor: "transparent",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = colors.accent;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "transparent";
+                  }}
+                >
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
+                    <div
+                      className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center"
+                      style={{
+                        background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)`,
+                      }}
                     >
-                        <div className="mb-4 sm:mb-5 md:mb-6">
-                            <div
-                                className="w-10 sm:w-12 md:w-16 h-1 mb-2 sm:mb-3 md:mb-4 rounded-full"
-                                style={{ backgroundColor: colors.accent }}
-                            />
-                            <h2
-                                className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-1.5 sm:mb-2"
-                                style={{ fontWeight: 700, color: colors.text }}
-                            >
-                                Our Offices
-                            </h2>
-                            <p className="text-[11px] sm:text-xs md:text-sm lg:text-base text-gray-600">
-                                Visit us at any of our locations across
-                                Maharashtra
-                            </p>
-                        </div>
+                      <Building2 className="text-white w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                    </div>
+                    {office.city === "Amravati" && (
+                      <span
+                        className="px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs md:text-sm"
+                        style={{
+                          backgroundColor: colors.accent,
+                          color: "white",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Head Office
+                      </span>
+                    )}
+                  </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-5">
-                            {offices.map((office, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.4 + index * 0.1 }}
-                                    whileHover={{ y: -5, scale: 1.02 }}
-                                    className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 border-2 border-gray-200 hover:shadow-lg transition-all"
-                                    style={{
-                                        borderColor: "transparent",
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.borderColor =
-                                            colors.accent;
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.borderColor =
-                                            "transparent";
-                                    }}
-                                >
-                                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
-                                        <div
-                                            className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg sm:rounded-xl flex items-center justify-center"
-                                            style={{
-                                                background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.accent} 100%)`,
-                                            }}
-                                        >
-                                            <Building2 className="text-white w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-                                        </div>
-                                        {office.city === "Amravati" && (
-                                            <span
-                                                className="px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs md:text-sm"
-                                                style={{
-                                                    backgroundColor: colors.accent,
-                                                    color: "white",
-                                                    fontWeight: 600,
-                                                }}
-                                            >
-                                                Head Office
-                                            </span>
-                                        )}
-                                    </div>
+                  <h3
+                    className="text-base sm:text-lg md:text-xl lg:text-2xl mb-2 sm:mb-2.5 md:mb-4"
+                    style={{
+                      fontWeight: 700,
+                      color: colors.text,
+                    }}
+                  >
+                    {office.city}
+                  </h3>
 
-                                    <h3
-                                        className="text-base sm:text-lg md:text-xl lg:text-2xl mb-2 sm:mb-2.5 md:mb-4"
-                                        style={{
-                                            fontWeight: 700,
-                                            color: colors.text,
-                                        }}
-                                    >
-                                        {office.city}
-                                    </h3>
-
-                                    <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
-                                        <div className="flex items-start gap-2 sm:gap-2.5 md:gap-3">
-                                            <MapPin
-                                                size={13}
-                                                className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 flex-shrink-0 mt-0.5"
-                                                style={{ color: colors.accent }}
-                                            />
-                                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-snug">
-                                                {office.address}
-                                            </p>
-                                        </div>
-                                        <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3">
-                                            <Clock
-                                                size={13}
-                                                className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 flex-shrink-0"
-                                                style={{ color: colors.accent }}
-                                            />
-                                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700">
-                                                {office.phone}
-                                            </p>
-                                        </div>
-                                        <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3">
-                                            <Clock
-                                                size={13}
-                                                className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 flex-shrink-0"
-                                                style={{ color: colors.accent }}
-                                            />
-                                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700">
-                                                {office.hours}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
+                  <div className="space-y-1.5 sm:space-y-2 md:space-y-3">
+                    <div className="flex items-start gap-2 sm:gap-2.5 md:gap-3">
+                      <MapPin
+                        size={13}
+                        className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 flex-shrink-0 mt-0.5"
+                        style={{ color: colors.accent }}
+                      />
+                      <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-snug">
+                        {office.address}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3">
+                      <Phone
+                        size={13}
+                        className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 flex-shrink-0"
+                        style={{ color: colors.accent }}
+                      />
+                      <p className="text-[11px] sm:text-xs md:text-sm text-gray-700">
+                        {office.phone}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3">
+                      <Clock
+                        size={13}
+                        className="sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 flex-shrink-0"
+                        style={{ color: colors.accent }}
+                      />
+                      <p className="text-[11px] sm:text-xs md:text-sm text-gray-700">
+                        {office.hours}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>

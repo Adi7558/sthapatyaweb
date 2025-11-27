@@ -17,7 +17,7 @@ export function Footer() {
                     className="text-center text-sm"
                     style={{ color: colors.textLight }}
                     >
-                    All rights reserved © {new Date().getFullYear()} Sthapatya Consultants India Pvt. Ltd. 
+                    All rights reserved © {new Date().getFullYear()} Sthapatya Consultants & Softwares India Pvt. Ltd. 
                 </p>
 
             </div>

@@ -28,7 +28,7 @@ import {
 
 import { useThemeColors } from "../theme/useThemeColors";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
-import { Footer } from "@/components/layout/Footer";
+// import { Footer } from "@/components/layout/Footer"; // optional
 
 // 🔹 Sanitizer to avoid literal "NULL" / null / empty strings
 const sanitizeText = (value?: string | null): string => {
@@ -193,7 +193,7 @@ export function ServicesPage() {
     { title: "24/7 Support", icon: Shield },
   ];
 
-    const integrations = [
+  const integrations = [
     {
       icon: Network,
       title: "IGR Portal",
@@ -225,7 +225,6 @@ export function ServicesPage() {
       desc: "AI-powered chatbot integration for 24/7 assistance with tax, bills, and municipal queries.",
     },
   ];
-
 
   return (
     <div className="min-h-screen bg-white">
@@ -303,7 +302,7 @@ export function ServicesPage() {
               </button>
               <button
                 onClick={() => router.push("/contact")}
-                className="px-8 py-4 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white transition-all duration-300 hover:bg-white/20 hover:scale-105"
+                className="px-8 py-4 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white transition-all duration-300 hover:bg白/20 hover:scale-105"
                 style={{ fontWeight: 600 }}
               >
                 Contact Us
@@ -718,3 +717,5 @@ export function ServicesPage() {
     </div>
   );
 }
+
+export default ServicesPage;
