@@ -2873,7 +2873,7 @@ export function HomePage() {
               transition={{ delay: 0.5 }}
               className="pt-8 text-center"
             >
-              {/* <p
+              <p
                 className="text-sm"
                 style={{
                   color: colors.textLight,
@@ -2882,7 +2882,7 @@ export function HomePage() {
               >
                 © 2025 Sthapatya Consultants India Pvt. Ltd. All rights
                 reserved.
-              </p> */}
+              </p>
             </motion.div>
           </motion.div>
         </div>

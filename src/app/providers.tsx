@@ -8,30 +8,33 @@ import { ThemeProvider } from "@/components/theme/ThemeContext";
 import { usePathname } from "next/navigation";
 
 interface AppProvidersProps {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }
 
 export function AppProviders({ children }: AppProvidersProps) {
-  const pathname = usePathname();
+    const pathname = usePathname();
 
-  // // All routes where we DON'T want nav + footer
-  // const noLayoutRoutes = [
-  //   "/not-found"
-  // ];
+    // PAGES THAT EXIST
+    const validRoutes = ["/", "/about", "/journey", "/projects", "/services", "/career", "/contact",];
 
-  // const hideLayout = noLayoutRoutes.includes(pathname ?? "");
-  
-  // Hide layout ONLY when the route is the Next.js built-in 404 page
-  // const hideLayout =
-  //  pathname?.startsWith("/not-found");
+    // If pathname is not one of these → it's NotFound
+    const isNotFoundPage = !validRoutes.includes(pathname);
 
-   return (
-    <ThemeProvider>
-      <Toaster position="top-right" richColors closeButton />
+    // Homepage → hide footer only
+    const hideFooterOnHome = pathname === "/";
 
-      {/* {!hideLayout && <Navbar />} */}
-      {children}
-      {/* {!hideLayout && <Footer />} */}
-    </ThemeProvider>
-  );
+    const hideNavbar = isNotFoundPage;
+    const hideFooter = isNotFoundPage || hideFooterOnHome;
+
+    return (
+        <ThemeProvider>
+            <Toaster position="top-right" richColors closeButton />
+
+            {!hideNavbar && <Navbar />}
+
+            {children}
+
+            {!hideFooter && <Footer />}
+        </ThemeProvider>
+    );
 }
