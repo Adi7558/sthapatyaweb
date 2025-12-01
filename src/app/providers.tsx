@@ -14,17 +14,24 @@ interface AppProvidersProps {
 export function AppProviders({ children }: AppProvidersProps) {
   const pathname = usePathname();
 
-  // Hide layout ONLY when the route is the Next.js built-in 404 page
-  const hideLayout =
-   pathname?.startsWith("/_not-found");
+  // // All routes where we DON'T want nav + footer
+  // const noLayoutRoutes = [
+  //   "/not-found"
+  // ];
 
-  return (
+  // const hideLayout = noLayoutRoutes.includes(pathname ?? "");
+  
+  // Hide layout ONLY when the route is the Next.js built-in 404 page
+  // const hideLayout =
+  //  pathname?.startsWith("/not-found");
+
+   return (
     <ThemeProvider>
       <Toaster position="top-right" richColors closeButton />
 
-      {!hideLayout && <Navbar />}
+      {/* {!hideLayout && <Navbar />} */}
       {children}
-      {!hideLayout && <Footer />}
+      {/* {!hideLayout && <Footer />} */}
     </ThemeProvider>
   );
 }

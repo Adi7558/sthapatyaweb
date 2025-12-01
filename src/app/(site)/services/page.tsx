@@ -1,6 +1,6 @@
 // src/app/services/page.tsx
 import type { Metadata } from "next";
-import ServicesPage from "./../../components/pages/ServicesPages";
+import ServicesPage from "@/components/pages/ServicesPages";
 
 // ✅ ISR: cache + rebuild every 1 hour
 export const revalidate = 3600;

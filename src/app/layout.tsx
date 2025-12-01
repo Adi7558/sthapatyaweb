@@ -18,9 +18,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <RouteLoaderProvider>
+        {/* <RouteLoaderProvider> */}
           <AppProviders>{children}</AppProviders>
-        </RouteLoaderProvider>
+        {/* </RouteLoaderProvider> */}
       </body>
     </html>
   );
